@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wesleybertipaglia.demo.dtos.DemoCreateDTO;
@@ -24,8 +25,12 @@ public class DemoService {
     DemoRepository demoRepository;
 
     @Transactional(readOnly = true)
-    public Page<DemoReadDTO> listDemos(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<DemoReadDTO> listDemos(int page, int size, String sort, String direction) {
+        Sort sortOrder = direction.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sort).ascending()
+                : Sort.by(sort).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
         return demoRepository.findAll(pageable).map(this::demoToDemoReadDTOMapper);
     }
 

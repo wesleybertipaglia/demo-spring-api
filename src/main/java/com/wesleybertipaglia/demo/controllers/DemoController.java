@@ -24,8 +24,10 @@ public class DemoController {
     @GetMapping
     public Page<DemoReadDTO> listDemos(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return demoService.listDemos(page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "title") String sort,
+            @RequestParam(defaultValue = "asc") String direction) {
+        return demoService.listDemos(page, size, sort, direction);
     }
 
     @GetMapping("{id}")
