@@ -20,6 +20,7 @@ The application includes the following functionalities:
 
 - Create, read, update, and delete a Demo entity.
 - Entity Validation
+- Exception Handling
 - Unit tests for CRUD operations
 - API documentation (Swagger)
 - Production and Test profiles
