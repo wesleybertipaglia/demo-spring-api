@@ -41,7 +41,12 @@ The easiest way to run the application is with Docker.
 - **Docker**, you can download and install it from [here](https://www.docker.com/products/docker-desktop).
 - **Docker Compose**, you can download and install it from [here](https://docs.docker.com/compose/install/).
 
-**2. Running**
+**2. Create the .env file**
+
+- Create a `.env` file in the root directory following the .env.example file.
+- Edit the `.env` file and set the environment variables.
+
+**3. Running**
 
 To run the application, execute the following command:
 
