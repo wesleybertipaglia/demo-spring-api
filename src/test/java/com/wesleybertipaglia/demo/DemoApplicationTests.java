@@ -68,7 +68,7 @@ class DemoApplicationTests {
 
 		Page<DemoReadDTO> demoPage = new PageImpl<>(List.of(demoReadDto));
 
-		when(demoService.listDemos(0, 10, "id", "asc")).thenReturn(demoPage);
+		when(demoService.listDemos(0, 10, "id", "asc", null, null)).thenReturn(demoPage);
 
 		mockMvc.perform(get("/demos")
 				.param("page", "0")

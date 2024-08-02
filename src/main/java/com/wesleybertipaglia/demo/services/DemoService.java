@@ -25,13 +25,26 @@ public class DemoService {
     DemoRepository demoRepository;
 
     @Transactional(readOnly = true)
-    public Page<DemoReadDTO> listDemos(int page, int size, String sort, String direction) {
+    public Page<DemoReadDTO> listDemos(int page, int size, String sort, String direction, String title,
+            String description) {
         Sort sortOrder = direction.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sort).ascending()
                 : Sort.by(sort).descending();
 
         Pageable pageable = PageRequest.of(page, size, sortOrder);
-        return demoRepository.findAll(pageable).map(this::demoToDemoReadDTOMapper);
+        Page<Demo> demos;
+
+        if (title != null && description != null) {
+            demos = demoRepository.findAllByTitleContainingAndDescriptionContaining(title, description, pageable);
+        } else if (title != null) {
+            demos = demoRepository.findAllByTitleContaining(title, pageable);
+        } else if (description != null) {
+            demos = demoRepository.findAllByDescriptionContaining(description, pageable);
+        } else {
+            demos = demoRepository.findAll(pageable);
+        }
+
+        return demos.map(this::demoToDemoReadDTOMapper);
     }
 
     @Transactional(readOnly = true)
