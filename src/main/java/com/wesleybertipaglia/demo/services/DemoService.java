@@ -10,6 +10,7 @@ import com.wesleybertipaglia.demo.entities.Demo;
 import com.wesleybertipaglia.demo.repositories.DemoRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,12 +33,12 @@ public class DemoService {
         return demoToDemoReadDTOMapper(demo);
     }
 
-    public DemoReadDTO createDemo(DemoCreateDTO demoCreateDTO) {
+    public DemoReadDTO createDemo(@Valid DemoCreateDTO demoCreateDTO) {
         Demo demo = new Demo(demoCreateDTO.title(), demoCreateDTO.description());
         return demoToDemoReadDTOMapper(demoRepository.save(demo));
     }
 
-    public DemoReadDTO updateDemo(Long id, DemoUpdateDTO demoUpdateDTO) {
+    public DemoReadDTO updateDemo(Long id, @Valid DemoUpdateDTO demoUpdateDTO) {
         Demo demo = demoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Demo not found"));
 
