@@ -5,11 +5,14 @@ import com.wesleybertipaglia.demo.dtos.DemoCreateDTO;
 import com.wesleybertipaglia.demo.dtos.DemoReadDTO;
 import com.wesleybertipaglia.demo.dtos.DemoUpdateDTO;
 import com.wesleybertipaglia.demo.services.DemoService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -63,12 +66,18 @@ class DemoApplicationTests {
 	void testListDemos() throws Exception {
 		DemoReadDTO demoReadDto = new DemoReadDTO(1L, "SWE 1", "Software Engineering 1");
 
-		when(demoService.listDemos()).thenReturn(List.of(demoReadDto));
+		Page<DemoReadDTO> demoPage = new PageImpl<>(List.of(demoReadDto));
 
-		mockMvc.perform(get("/demos"))
+		when(demoService.listDemos(0, 10, "id", "asc")).thenReturn(demoPage);
+
+		mockMvc.perform(get("/demos")
+				.param("page", "0")
+				.param("size", "10")
+				.param("sort", "id")
+				.param("direction", "asc"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].title").value("SWE 1"))
-				.andExpect(jsonPath("$[0].description").value("Software Engineering 1"));
+				.andExpect(jsonPath("$.content[0].title").value("SWE 1"))
+				.andExpect(jsonPath("$.content[0].description").value("Software Engineering 1"));
 	}
 
 	@Test
