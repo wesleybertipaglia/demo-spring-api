@@ -64,7 +64,7 @@ The following Entity-Relationship Diagram (ERD) shows the properties of the Demo
 
 ```mermaid
 classDiagram
-    Demo {
+    class Demo {
         Long id
         String name
         String description
