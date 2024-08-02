@@ -22,11 +22,13 @@ The application includes the following functionalities:
 - Entity Validation
 - Exception Handling
 - Pagination, sorting, and filtering
+- Security
 - API documentation (Swagger)
-- Unit tests for CRUD operations
+- Success and failure tests for CRUD operations
 - Logging
 - Production, Development, and Test profiles
 - Docker support (Dockerfile, docker-compose)
+- CI/CD pipeline
 
 ## Getting Started
 
