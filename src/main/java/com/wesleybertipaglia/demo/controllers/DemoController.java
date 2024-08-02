@@ -1,14 +1,13 @@
 package com.wesleybertipaglia.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import com.wesleybertipaglia.demo.dtos.DemoCreateDTO;
 import com.wesleybertipaglia.demo.dtos.DemoReadDTO;
 import com.wesleybertipaglia.demo.dtos.DemoUpdateDTO;
 import com.wesleybertipaglia.demo.services.DemoService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/demos")
@@ -23,8 +22,10 @@ public class DemoController {
     }
 
     @GetMapping
-    public List<DemoReadDTO> listDemos() {
-        return demoService.listDemos();
+    public Page<DemoReadDTO> listDemos(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return demoService.listDemos(page, size);
     }
 
     @GetMapping("{id}")

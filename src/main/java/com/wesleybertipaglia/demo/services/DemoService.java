@@ -1,7 +1,11 @@
 package com.wesleybertipaglia.demo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wesleybertipaglia.demo.dtos.DemoCreateDTO;
 import com.wesleybertipaglia.demo.dtos.DemoReadDTO;
@@ -10,10 +14,8 @@ import com.wesleybertipaglia.demo.entities.Demo;
 import com.wesleybertipaglia.demo.repositories.DemoRepository;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import jakarta.validation.Valid;
 
 @Service
 public class DemoService {
@@ -21,11 +23,13 @@ public class DemoService {
     @Autowired
     DemoRepository demoRepository;
 
-    public List<DemoReadDTO> listDemos() {
-        return demoRepository.findAll().stream()
-                .map(this::demoToDemoReadDTOMapper).collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<DemoReadDTO> listDemos(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return demoRepository.findAll(pageable).map(this::demoToDemoReadDTOMapper);
     }
 
+    @Transactional(readOnly = true)
     public DemoReadDTO getDemo(Long id) {
         Demo demo = demoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Demo not found"));
@@ -33,11 +37,13 @@ public class DemoService {
         return demoToDemoReadDTOMapper(demo);
     }
 
+    @Transactional
     public DemoReadDTO createDemo(@Valid DemoCreateDTO demoCreateDTO) {
         Demo demo = new Demo(demoCreateDTO.title(), demoCreateDTO.description());
         return demoToDemoReadDTOMapper(demoRepository.save(demo));
     }
 
+    @Transactional
     public DemoReadDTO updateDemo(Long id, @Valid DemoUpdateDTO demoUpdateDTO) {
         Demo demo = demoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Demo not found"));
@@ -53,6 +59,7 @@ public class DemoService {
         return demoToDemoReadDTOMapper(demoRepository.save(demo));
     }
 
+    @Transactional
     public void deleteDemo(Long id) {
         Demo demo = demoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Demo not found"));
