@@ -24,7 +24,7 @@ The application includes the following functionalities:
 - Pagination, sorting, and filtering
 - Unit tests for CRUD operations
 - API documentation (Swagger)
-- Production and Test profiles
+- Production, Development, and Test profiles
 - Docker support (Dockerfile, docker-compose)
 
 ## Getting Started
